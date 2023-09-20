@@ -1,0 +1,10 @@
+:80 {
+    root * /usr/share/caddy
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy directus:8055
+    }
+    handle * {
+        reverse_proxy web:3000
+    }
+}
