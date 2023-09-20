@@ -1,25 +1,38 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
+import type {BackendResponse} from '../interfaces'
+import Post from '../components/Post.vue'
 
-export default defineComponent({
-  name: 'IndexPage',
-  data() {
-    return {
-      message: 'Hello world!',
-    }
+interface PostData {
+  id: number
+  title: string
+  content: string
+}
+
+const posts = ref([] as PostData[])
+
+const response = await useFetch<BackendResponse<PostData>>('/api/items/posts', {
+  query: {
+    sort: '-date_created',
   },
 })
+
+if (response != null) {
+  posts.value = response.data.value!.data
+}
 </script>
 
 <template>
-  <h1>Some example website</h1>
-  <a href="/books">Books catalogue</a>
-  <a href="/blog">Blog with posts</a>
+  <PageTitle>Блог</PageTitle>
+  <Post
+    v-for="post in posts"
+    :key="post.id"
+    :title="post.title"
+    :content="post.content"
+  />
 </template>
 
-<style scoped>
-a {
-  display: block;
-  margin-bottom: 10px;
-}
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 </style>
