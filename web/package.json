@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "dndworlds-frontend",
   "private": true,
   "scripts": {
     "build": "nuxt build",
