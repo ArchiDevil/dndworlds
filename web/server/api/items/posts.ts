@@ -1,5 +1,4 @@
 export default defineEventHandler((event) => {
-  console.error(event)
   return {
     data: [
       {

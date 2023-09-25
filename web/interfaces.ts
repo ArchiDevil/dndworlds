@@ -1,5 +1,9 @@
-export interface BackendResponse<T> {
+export interface BackendArrayResponse<T> {
   data: T[]
+}
+
+export interface BackendResponse<T> {
+  data: T
 }
 
 export interface BookData {
@@ -19,4 +23,12 @@ export interface BookData {
 export interface BookTag {
   id: number
   name: string
+}
+
+export interface ChapterData {
+  id: number
+  status: 'published' | 'draft'
+  title: string
+  content: string
+  book_id: number
 }

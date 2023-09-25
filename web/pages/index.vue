@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {BackendResponse} from '../interfaces'
+import type {BackendArrayResponse} from '../interfaces'
 import Post from '../components/Post.vue'
 
 interface PostData {
@@ -8,17 +8,20 @@ interface PostData {
   content: string
 }
 
-const posts = ref([] as PostData[])
+const response = await useFetch<BackendArrayResponse<PostData>>(
+  '/api/items/posts',
+  {
+    query: {
+      sort: '-date_created',
+    },
+  }
+)
 
-const response = await useFetch<BackendResponse<PostData>>('/api/items/posts', {
-  query: {
-    sort: '-date_created',
-  },
-})
-
-if (response != null) {
-  posts.value = response.data.value!.data
+if (response.error) {
+  console.error(response.error)
 }
+
+const posts = response.data.value!.data
 </script>
 
 <template>
