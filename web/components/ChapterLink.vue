@@ -14,5 +14,14 @@ const chapterLink = computed(() => {
 </script>
 
 <template>
-  <a :href="chapterLink">{{ props.chapter.title }}</a>
+  <a class="chapter-link" :href="chapterLink">{{ props.chapter.title }}</a>
 </template>
+
+<style scoped>
+.chapter-link {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+  display: block;
+}
+</style>
