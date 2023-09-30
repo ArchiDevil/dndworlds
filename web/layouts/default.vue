@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-12">
+  <div class="container md:px-12">
     <Topbar></Topbar>
     <slot />
   </div>
