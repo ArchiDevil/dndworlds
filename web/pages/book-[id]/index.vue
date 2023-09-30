@@ -30,8 +30,7 @@ const chapters = chapter_response.data.value!.data
 </script>
 
 <template>
-  <p>Its ID is: {{ id }}</p>
-  <p class="book-name">Its name is: {{ data.title }}</p>
+  <p class="book-name">{{ data.title }}</p>
   <p class="chapters-title">Оглавление</p>
   <ul>
     <li v-for="chapter in chapters">

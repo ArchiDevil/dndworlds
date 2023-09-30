@@ -70,7 +70,7 @@ a.chapter-name {
 .container-content :deep(h6) {
   @apply text-xl;
   @apply font-semibold;
-  @apply mt-2;
+  @apply mt-2 mb-1;
 }
 
 .container-content :deep(blockquote) {
