@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  directus:
+    image: directus/directus:10.6
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8055:8055
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      DB_CLIENT: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_DATABASE: ${POSTGRES_DB}
+      EMAIL_VERIFY_SETUP: false
+    volumes:
+      - uploads:/directus/uploads
+  web:
+    build:
+      context: .
+      dockerfile: web.Dockerfile
+    restart: always
+    depends_on:
+      - directus
+    ports:
+      - 3000:3000
+  proxy:
+    build:
+      context: .
+      dockerfile: proxy.Dockerfile
+    restart: always
+    depends_on:
+      - web
+    ports:
+      - 80:80
+
+
+volumes:
+  postgres-data:
+  uploads:
