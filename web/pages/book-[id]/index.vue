@@ -30,8 +30,9 @@ const chapters = chapter_response.data.value!.data
 </script>
 
 <template>
-  <p class="book-name">{{ data.title }}</p>
-  <p class="chapters-title">Оглавление</p>
+  <h1 class="book-name">{{ data.title }}</h1>
+  <p class="book-description">{{ data.description }}</p>
+  <h2 class="chapters-title">Оглавление</h2>
   <ul>
     <li v-for="chapter in chapters">
       <ChapterLink :chapter="chapter"></ChapterLink>
@@ -41,15 +42,19 @@ const chapters = chapter_response.data.value!.data
 
 <style scoped>
 .book-name {
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 1rem 0;
+  @apply text-3xl;
+  @apply font-semibold;
+  @apply mt-4;
+}
+
+.book-description {
+  @apply mt-2;
 }
 
 .chapters-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 1rem 0 0.5rem 0;
-  border-bottom: 2px solid #aaa;
+  @apply text-2xl;
+  @apply font-semibold;
+  @apply mt-4 mb-2;
+  @apply border-b-2 border-solid border-gray-500;
 }
 </style>

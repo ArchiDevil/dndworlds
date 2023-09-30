@@ -9,6 +9,7 @@ export interface BackendResponse<T> {
 export interface BookData {
   id: number
   title: string
+  description: string
   tags: [
     {
       book_tags_id: BookTag
@@ -16,7 +17,6 @@ export interface BookData {
   ]
   finished: boolean
   cover: string
-  description: string
   file: string
 }
 

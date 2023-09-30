@@ -19,7 +19,7 @@ const chapterLink = computed(() => {
 
 <style scoped>
 .chapter-link {
-  @apply text-2xl font-medium;
+  @apply text-xl font-medium;
   @apply hover:underline;
   @apply mt-2;
   @apply block;
