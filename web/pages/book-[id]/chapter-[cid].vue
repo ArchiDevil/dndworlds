@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import {Token, TokenizerAndRendererExtension, marked} from 'marked'
+import {marked} from 'marked'
+
+import SidebarExtension from '~/sidebar-extension'
 import {BackendResponse, ChapterData} from '~/interfaces'
 
 const route = useRoute()
@@ -8,40 +10,7 @@ const bookId = ref(route.params.id)
 
 const backlink = computed(() => `/book-${bookId.value}/`)
 
-const sidebarExtension: TokenizerAndRendererExtension = {
-  name: 'sidebarExtension',
-  level: 'block',
-  start(src: string) {
-    return src.match(/^:/)?.index
-  },
-  tokenizer(src: string, tokens: Token[]) {
-    const rule = /^((?::.*)(?:\n|$))+/
-    const match = src.match(rule)
-    if (match) {
-      const processed = match[0]
-        .trim()
-        .split('\n')
-        .map((line) => line.replace(/^:/, ''))
-        .join('\n')
-      const token = {
-        type: 'sidebarExtension',
-        raw: match[0],
-        text: processed,
-        tokens: [] as Token[],
-      }
-      token.tokens = this.lexer.blockTokens(token.text)
-      return token
-    }
-  },
-  renderer(token: any) {
-    return (
-      '\n<blockquote class="sidebar">' +
-      this.parser.parse(token.tokens) +
-      '</blockquote>'
-    )
-  },
-}
-marked.use({extensions: [sidebarExtension]})
+marked.use({extensions: [SidebarExtension]})
 
 const response = await useFetch<BackendResponse<ChapterData>>(
   `/api/items/chapter/${chapterId.value}`
@@ -67,93 +36,89 @@ onMounted(() => {
 
 <style scoped>
 .chapter-name {
-  font-weight: 300;
-  color: #333;
+  @apply font-light;
+  @apply text-gray-700;
 }
 
-a.chapter-name:hover {
-  text-decoration: underline;
+a.chapter-name {
+  @apply hover:underline;
 }
 
 .container-content {
-  margin-bottom: 4rem;
+  @apply mb-16;
 }
 
 .container-content :deep(h1) {
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 1.5rem 0 0.5rem 0;
+  @apply text-4xl;
+  @apply font-semibold;
+  @apply mt-8 mb-2;
 }
 
 .container-content :deep(h2) {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 1rem 0 0.5rem 0;
-  border-bottom: 2px solid #aaa;
+  @apply text-2xl;
+  @apply font-semibold;
+  @apply mt-4 mb-2;
+  @apply border-b-2 border-solid border-gray-500;
 }
 
 .container-content :deep(h3) {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 1rem 0 0 0;
+  @apply text-xl;
+  @apply font-semibold;
+  @apply mt-4;
 }
 
 .container-content :deep(h6) {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0.5rem 0 0 0;
+  @apply text-xl;
+  @apply font-semibold;
+  @apply mt-2;
 }
 
 .container-content :deep(blockquote) {
-  border: 1px solid rgb(98, 0, 0);
-  padding: 1rem;
-  margin: 0.5rem 0;
-  background-color: #eee;
-  font-size: 0.9rem;
+  @apply border-red-900 border border-solid;
+  @apply p-4 my-4;
+  @apply bg-gray-100;
+  @apply text-sm;
 }
 
 .container-content :deep(ul) {
-  margin: 0.5rem 0;
-  padding-left: 1rem;
+  @apply my-2 pl-4;
 }
 
 .container-content :deep(li) {
-  list-style: outside;
-  list-style-type: disc;
+  @apply list-disc list-outside;
 }
 
 .container-content :deep(table) {
-  margin-bottom: 1.5rem;
+  @apply mb-6;
+}
+
+.container-content :deep(th),
+.container-content :deep(td) {
+  @apply border border-solid border-zinc-500;
+  @apply py-1 px-2;
 }
 
 .container-content :deep(th) {
-  border: 1px solid #aaa;
-  padding: 0.25rem 0.5rem;
-  text-align: left;
-}
-
-.container-content :deep(td) {
-  border: 1px solid #aaa;
-  padding: 0.25rem 0.5rem;
+  @apply text-left;
 }
 
 .container-content :deep(p) {
-  margin: 0 0 0.5rem 0;
+  @apply mb-2;
 }
 
 .container-content :deep(p:last-child) {
-  margin: 0;
+  @apply m-0;
 }
 
 .container-content :deep(.sidebar) {
-  background-color: rgb(198, 206, 207);
-  border: 1px solid rgb(179, 179, 179);
-  padding: 1rem;
+  @apply bg-zinc-300;
+  @apply border border-solid border-zinc-400;
+  @apply p-4;
 }
 
 .container-content :deep(.sidebar h1) {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
+  @apply text-2xl;
+  @apply font-semibold;
+  @apply mt-0 mb-2;
 }
 </style>
